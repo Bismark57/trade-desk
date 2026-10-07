@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trade Desk — Personal Market Dashboard</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <div class="brand">
+    <span class="logo">◈</span>
+    <div>
+      <h1>Trade Desk</h1>
+      <p class="sub">Personal market dashboard</p>
+    </div>
+  </div>
+  <div class="status">
+    <span id="marketBadge" class="badge">—</span>
+    <span id="lastUpdated" class="muted">Not connected</span>
+    <button id="refreshBtn" title="Refresh now">⟳</button>
+    <button id="settingsBtn" title="Settings">⚙</button>
+  </div>
+</header>
+
+<div id="setupBanner" class="banner hidden">
+  <div>
+    <strong>Data worker not connected.</strong>
+    <span>Prices need your Cloudflare quote proxy. Deploy it once (~5 min), then paste its URL in ⚙ Settings.</span>
+  </div>
+  <a href="README.md" target="_blank" rel="noopener">Setup guide</a>
+</div>
+
+<main>
+  <section class="card">
+    <div class="card-head">
+      <h2>Watchlist</h2>
+      <form id="addForm" class="add-form">
+        <input id="symbolInput" placeholder="Add symbol — e.g. AMD, NVDA, RY.TO" autocomplete="off" spellcheck="false">
+        <button type="submit">Add</button>
+      </form>
+    </div>
+    <div class="table-wrap">
+      <table id="quotes">
+        <thead>
+          <tr>
+            <th>Symbol</th><th>Price</th><th>Day</th><th>Trend</th>
+            <th>Day range</th><th>Volume</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="quoteBody">
+          <tr><td colspan="7" class="muted center">Waiting for data…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="footnote">Quotes via Yahoo Finance through your own proxy. Delayed ~15 min. Not investment advice.</p>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Price alerts</h2>
+      <span class="muted small" id="alertHint">Alerts check every 60s while this tab is open.</span>
+    </div>
+    <form id="alertForm" class="alert-form">
+      <select id="alertSymbol"></select>
+      <select id="alertType">
+        <option value="above">Price rises above</option>
+        <option value="below">Price falls below</option>
+        <option value="pct_up">Rises more than</option>
+        <option value="pct_down">Falls more than</option>
+      </select>
+      <input id="alertValue" type="number" step="any" min="0" placeholder="Value">
+      <span id="alertUnit" class="muted">$</span>
+      <button type="submit">Set alert</button>
+    </form>
+    <ul id="alertList" class="alerts"></ul>
+  </section>
+</main>
+
+<div id="settingsModal" class="modal hidden">
+  <div class="modal-box">
+    <h3>Settings</h3>
+    <label>Quote proxy (Cloudflare Worker) URL
+      <input id="workerUrl" placeholder="https://trade-desk-proxy.&lt;you&gt;.workers.dev">
+    </label>
+    <label>Refresh interval
+      <select id="refreshSecs">
+        <option value="30">30 seconds</option>
+        <option value="60" selected>60 seconds</option>
+        <option value="120">2 minutes</option>
+        <option value="300">5 minutes</option>
+      </select>
+    </label>
+    <label class="row"><input type="checkbox" id="soundOn" checked> Alert sound</label>
+    <div class="modal-actions">
+      <button id="saveSettings">Save</button>
+      <button id="closeSettings" class="ghost">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
